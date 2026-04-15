@@ -79,3 +79,20 @@ def test_headers_appear_in_table_header():
     assert "<th>sku</th>" in result
     assert "<th>price</th>" in result
     assert "<th>stock</th>" in result
+
+
+def test_multiple_sections_present_when_all_change_types_exist():
+    """Verify that added, removed, and changed sections all appear together."""
+    diff = _empty_diff()
+    diff.added.append({"id": "1", "name": "Alice", "value": "10"})
+    diff.removed.append({"id": "2", "name": "Bob", "value": "20"})
+    diff.changed.append({
+        "old": {"id": "3", "name": "Carol", "value": "30"},
+        "new": {"id": "3", "name": "Carol", "value": "99"},
+    })
+    result = render_html(diff)
+    assert "Added Rows" in result
+    assert "Removed Rows" in result
+    assert "Changed Rows (Before)" in result
+    assert "Changed Rows (After)" in result
+    assert "no-changes" not in result
