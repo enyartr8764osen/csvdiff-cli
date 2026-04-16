@@ -82,3 +82,13 @@ def test_empty_sections_omitted():
     result = render_mediawiki(diff)
     assert "== Removed Rows ==" not in result
     assert "== Changed Rows" not in result
+
+
+def test_multiple_added_rows_all_appear():
+    """All added rows should be rendered, not just the first one."""
+    diff = _empty_diff()
+    diff.added.append({"id": "1", "name": "Alice"})
+    diff.added.append({"id": "2", "name": "Bob"})
+    result = render_mediawiki(diff)
+    assert "Alice" in result
+    assert "Bob" in result
