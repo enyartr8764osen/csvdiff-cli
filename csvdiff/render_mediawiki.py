@@ -26,16 +26,20 @@ def _render_table(
     rows: List[Dict[str, str]],
     columns: List[str],
 ) -> None:
+    """Write a single MediaWiki wikitable section to *buf*.
+
+    Does nothing when *rows* is empty, so callers need not guard against that.
+    """
     if not rows:
         return
     widths = _column_widths(rows, columns)
     buf.write(f"== {title} ==\n")
     buf.write("{| class=\"wikitable\"\n")
-    buf.write("|-\n")
+    buf.write("|-)\n")
     header_cells = " || ".join(_pad(col, widths[col]) for col in columns)
     buf.write(f"! {header_cells}\n")
     for row in rows:
-        buf.write("|-\n")
+        buf.write("|-)\n")
         cells = " || ".join(_pad(row.get(col, ""), widths[col]) for col in columns)
         buf.write(f"| {cells}\n")
     buf.write("|}")  
