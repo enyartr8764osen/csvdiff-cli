@@ -95,4 +95,13 @@ def test_multiple_sections_present_when_all_change_types_exist():
     assert "Removed Rows" in result
     assert "Changed Rows (Before)" in result
     assert "Changed Rows (After)" in result
-    assert "no-changes" not in result
+
+
+def test_no_added_section_when_only_removed():
+    """Verify that the Added Rows section is absent when there are no added rows."""
+    diff = _empty_diff()
+    diff.removed.append({"id": "6", "name": "Eve", "value": "60"})
+    result = render_html(diff)
+    assert "Removed Rows" in result
+    assert "Added Rows" not in result
+    assert "Changed Rows" not in result
